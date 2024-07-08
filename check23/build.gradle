@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+}
+
+group = 'ru.clevertec.check'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'org.postgresql:postgresql:42.2.18'
+    testImplementation 'org.mockito:mockito-core:3.12.4'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'ru.clevertec.check.CheckRunner'
+    }
+
+    from {
+        // Добавляем в архив jar
+        // compileClasspath - если в dependencies стоит implementation
+        // compile - если в dependencies стоит compile
+        configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
